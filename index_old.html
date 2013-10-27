@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+Google Fusion Tables map
+</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" 
+   src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB7BQXZxlCppzCRDOX_XHQk39nptaao70A&sensor=false">
+</script>
+<script type="text/javascript"> 
+   function initialize() { 
+      var latlng = new google.maps.LatLng(27,17); 
+      var myOptions = { 
+         zoom: 2, 
+         center: latlng, 
+         mapTypeId: google.maps.MapTypeId.ROADMAP,
+      }; 
+      var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions); 
+      
+      var layer = new google.maps.FusionTablesLayer({  
+         query: {         
+            select: Location,         
+            from: '1kKSlNpECtJyaA2AOIRYxsB_lDnwi8jkM9mZRig4'
+         },     
+         styles: [{
+           polygonOptions: {
+             fillColor: "#ffffff",
+             fillOpacity: .2
+           }
+         },
+         {
+           where: "Status = 'Already'",
+           polygonOptions: {
+             fillColor: "#435955",
+             fillOpacity: .6
+           }
+         },
+         {
+           where: "Status = 'Later'",
+           polygonOptions: {
+             fillColor: "#E31E25",
+             fillOpacity: .6
+         }
+         }
+         ]
+      });     
+      layer.setMap(map); 
+      
+      google.maps.event.addListener(layer, 'click', function(e) {
+          var country = e.row['Location'].value;
+          console.log(country);
+          
+          e.infoWindowHtml = '<style type="text/css"> .window{ padding-bottom:15px;} </style><h1 class="window">' + country + '</h1>'
+      });
+      
+      
+   }
+</script> 
+</head> 
+<body onload="initialize()"> 
+   <!-- Add your own text between these comments --> 
+   My Map!
+   <!-- Add your own text above --> 
+   <div id="map_canvas" style="width:900px; height:500px"></div> 
+</body> 
+</html>
